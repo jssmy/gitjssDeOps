@@ -14,10 +14,10 @@
                 <div class="text-center">
                     @if($repositories->count())
                         <h4>{{trans('Congratulations')}}</h4>
-                        <h5>{{trans('gitscrum.you-have-successfully-added-repositories-for')}} {{config('app.name')}}</h5>
+                        <h5>{{trans('gitscrum.you-have-successfully-added-repositories-for')}} jssDevOps</h5>
                     @else
                         <h4>{{trans('gitscrum.choose-at-least-one-repository')}}</h4>
-                        <h5>{{trans('gitscrum.you-can-click')}} <a href="{{route('wizard.step1')}}">{{trans('gitscrum.here')}}</a>
+                        <h5>{{trans('gitscrum.you-can-click')}} <a href="{{route('wizard.step1','github')}}">{{trans('gitscrum.here')}}</a>
                             {{trans('gitscrum.to-try-again')}}</h5>
                     @endif
                 </div>
@@ -47,8 +47,8 @@
                             <strong>{{config('app.name')}}</strong></a>
 
                         <span>&nbsp;&nbsp;&nbsp;<strong>{{trans('gitscrum.or')}}</strong>&nbsp;&nbsp;&nbsp;</span>
-                        <a href="{{route('wizard.step3')}}" class="btn btn-lg btn-success btn-loader">{{trans('gitscrum.import-my')}}
-                            <strong>{{Auth::user()->provider}} {{trans('gitscrum.issues')}}</strong></a>
+                        <a href="{{route('wizard.step3','github')}}" class="btn btn-lg btn-success btn-loader">{{trans('gitscrum.import-my')}}
+                            <strong>{{Auth::user()->githubUser()->provider}} {{trans('gitscrum.issues')}}</strong></a>
 
                     @else
 
@@ -67,13 +67,13 @@
 
     </div>
 
-    <div class="authentication__right-screen">
+    <div style="background-image: url('/img/config/home.jpg');" class="authentication__right-screen">
 
         <div class="aligner">
             <div class="content">
 
-                <h1>GitScrum</h1>
-                <h2>be faster</h2>
+                <h1>jssDevOps</h1>
+                
 
             </div>
         </div>

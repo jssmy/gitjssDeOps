@@ -18,7 +18,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             'SocialiteProviders\GitLab\GitLabExtendSocialite@handle',
+            'SocialiteProviders\Google\GoogleExtendSocialite@handle',
+            'SocialiteProviders\Trello\TrelloExtendSocialite@handle',
+            'SocialiteProviders\Slack\SlackExtendSocialite@handle',
         ],
+
     ];
 
     /**

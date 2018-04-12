@@ -28,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = ['provider_id', 'provider', 'username', 'name', 'avatar', 'html_url', 'email',
-        'bio', 'location', 'blog', 'since', 'token', 'main_repository', 'position_held', 'refresh_token', ];
+        'bio', 'location', 'blog', 'since', 'token', 'main_repository', 'position_held', 'refresh_token','main_user_id' ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -48,7 +48,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(ConfigStatus::class, 'statuses', 'user_id', 'id');
     }
-
+ 
     public function issues()
     {
         return $this->belongsToMany(Issue::class, 'issues_has_users', 'user_id', 'issue_id');
@@ -69,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Branch::class, 'user_id', 'id');
     }
-
+ 
     public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
@@ -90,4 +90,9 @@ class User extends Authenticatable
         return $this->morphMany(Note::class, 'noteable')
             ->orderby('position', 'ASC');
     }
+
+    public function githubMainUser(){
+        return $this->belonsTo(MainUser::class,'id');        
+    }
+
 }

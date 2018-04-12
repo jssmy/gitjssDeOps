@@ -1,6 +1,6 @@
 <?php
 
-return [
+return [ 
 
     /*
     |--------------------------------------------------------------------------
@@ -11,26 +11,26 @@ return [
     | as Stripe, Mailgun, SparkPost and others. This file provides a sane
     | default location for this type of information, allowing packages
     | to have a conventional place to find your various credentials.
-    |
+    | 
     */
-
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+    ],
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => env('APP_URL').'/auth/provider/github/callback',
+        'redirect' => env('GITHUB_REDIRECT'),
     ],
-
-    'gitlab' => [
-        'client_id' => env('GITLAB_KEY'),
-        'client_secret' => env('GITLAB_SECRET'),
-        'redirect' => env('APP_URL').'/auth/provider/gitlab/callback',
-        'instance_uri' => env('GITLAB_INSTANCE_URI'),
+     'trello' => [
+        'client_id' => env('TRELLO_CLIENT_ID'),
+        'client_secret' => env('TRELLO_CLIENTE_SECRET'),
+        'redirect' => env('TRELLO_REDIRECT'),
     ],
-
-    'bitbucket' => [
-        'client_id' => env('BITBUCKET_CLIENT_ID'),
-        'client_secret' => env('BITBUCKET_CLIENT_SECRET'),
-        'redirect' => env('APP_URL').'/auth/provider/bitbucket/callback',
+     'slack' => [
+        'client_id' => env('SLACK_CLIENT_ID'),
+        'client_secret' => env('SLACK_CLIENTE_SECRET'),
+        'redirect' => env('SLACK_REDIRECT'),
     ],
-
 ];

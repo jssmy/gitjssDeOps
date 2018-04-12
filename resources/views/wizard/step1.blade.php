@@ -15,7 +15,7 @@
                 <h5>{{trans('gitscrum.you-have')}} {{$repositories->count()}} {{trans('gitscrum.repositories')}}</h5>
             </div>
 
-            <form action="{{route('wizard.step2')}}" method="post">
+            <form action="{{route('wizard.step2','github')}}" method="post">
 
                 {{ csrf_field() }}
 
@@ -30,8 +30,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button class="btn btn-lg btn-success btn-loader">{{trans('gitscrum.confirm-to-add-repositories-into-the')}} <strong>{{config('app.name')
-                    }}</strong></button>
+                    <button class="btn btn-lg btn-success btn-loader">{{trans('gitscrum.confirm-to-add-repositories-into-the')}} <strong>jssDevOps</strong></button>
                 </div>
 
             </form>
@@ -42,13 +41,13 @@
 
 </div>
 
-<div class="authentication__right-screen">
+<div style="background-image: url('/img/config/home.jpg');" class="authentication__right-screen">
 
     <div class="aligner">
         <div class="content">
 
-            <h1>GitScrum</h1>
-            <h2>be faster</h2>
+            <h1>jssDevOps</h1>
+            
 
         </div>
     </div>

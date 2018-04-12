@@ -153,6 +153,7 @@ class Gitlab implements ProviderInterface
         $data = $this->tplOrganization($obj);
 
         try {
+            //dd($data);
             $organization = Organization::create($data);
         } catch (\Illuminate\Database\QueryException $e) {
             $organization = Organization::where('username', $data['username'])

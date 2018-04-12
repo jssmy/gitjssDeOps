@@ -193,7 +193,7 @@ return [
         GitScrum\Providers\EventServiceProvider::class,
         GitScrum\Providers\RouteServiceProvider::class,
         GitScrum\Providers\SlackServiceProvider::class,
-
+        //--socialite provider
         SocialiteProviders\Manager\ServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,

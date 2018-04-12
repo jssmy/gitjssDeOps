@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'userAuth',
+        'passwords' => 'main_user',
     ],
 
     /*
@@ -45,6 +45,10 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+        'userAuth'=>[
+            'driver'=> 'session',
+            'provider'=>'main_user',
+        ]
     ],
 
     /*
@@ -69,6 +73,11 @@ return [
             'driver' => 'eloquent',
             'model' => GitScrum\Models\User::class,
         ],
+        'main_user'=>[
+            'driver'=>'eloquent',
+            'model' => GitScrum\Models\MainUser::class,  
+
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
@@ -94,6 +103,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+         'main_user' => [
+            'provider' => 'main_user',
             'table' => 'password_resets',
             'expire' => 60,
         ],

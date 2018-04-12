@@ -9,9 +9,13 @@ use Auth;
 
 class WizardController extends Controller
 {
+
+
     public function step1()
-    {
-        $repositories = (object) app(Auth::user()->provider)->readRepositories();
+    {   
+        
+        $repositories = (object) app(Auth::user()->githubUser()->provider)
+        ->readRepositories();
         $currentRepositories = ProductBacklog::all();
 
         Session::put('Repositories', $repositories);
@@ -22,16 +26,20 @@ class WizardController extends Controller
             ->with('columns', ['checkbox', 'repository', 'organization']);
     }
 
+
+
+
+
     public function step2(Request $request)
     {
         $repositories = Session::get('Repositories')->whereIn('provider_id', $request->repos);
         foreach ($repositories as $repository) {
-            app(Auth::user()->provider)->readCollaborators($repository->organization_title, $repository->title, $repository->provider_id);
+            app(Auth::user()->githubUser()->provider)->readCollaborators($repository->organization_title, $repository->title, $repository->provider_id);
             $product_backlog = ProductBacklog::where('provider_id', $repository->provider_id)->first();
             if (!isset($product_backlog)) {
                 $product_backlog = ProductBacklog::create(get_object_vars($repository));
             }
-            app(Auth::user()->provider)->createBranches($repository->organization_title, $product_backlog->id, $repository->title, $repository->provider_id);
+            app(Auth::user()->githubUser()->provider)->createBranches($repository->organization_title, $product_backlog->id, $repository->title, $repository->provider_id);
         }
 
         return view('wizard.step2')
@@ -41,8 +49,13 @@ class WizardController extends Controller
 
     public function step3()
     {
-        $result = app(Auth::user()->provider)->readIssues();
+        $result = app(Auth::user()->githubUser()->provider)->readIssues();
 
         return redirect()->route('issues.index', ['slug' => 0]);
     }
+
+    public function application(){
+        return view('wizard.application');
+    }
+
 }

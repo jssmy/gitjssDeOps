@@ -41,7 +41,10 @@ class ProductBacklogController extends Controller
      */
     public function store(ProductBacklogRequest $request)
     {
-        $productBacklog = ProductBacklog::create($request->all());
+        //dd($request->all());
+        $data= $request->all();
+        $productBacklog = ProductBacklog::create($data);
+        
 
         return redirect()->route('product_backlogs.show', ['slug' => $productBacklog->slug])
             ->with('success', trans('gitscrum.congratulations-the-product-backlog-has-been-created-with-successfully'));

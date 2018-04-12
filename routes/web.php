@@ -11,28 +11,84 @@
 |
 */
 Route::get('/', function () {
-    return redirect()->route('auth.login');
+    return view('public.home');
+
+
+     ///return redirect()->route('auth.login');
 })->name('home');
 
-Route::get('/dashboard', 'Web\UserController@dashboard')->name('user.dashboard')->middleware('user.authenticated', 'product-backlog');
+
+
+Route::get('/register', function(){
+
+})->name('register');
+
+
+Route::get('/dashboard', 'Web\UserController@dashboard')
+->name('user.dashboard')
+->middleware('user.authenticated','wizard.application','product-backlog');
+ 
+
+
+Route::get('/wizard-application','Web\WizardController@application')
+->name('config.application')
+->middleware('user.authenticated');
+
+
+
+/*Route::get('/dashboard', 'Web\UserController@dashboard')->name('user.dashboard')->middleware('user.authenticated','product-backlog');
+*/
+ 
 Route::get('/profile/{username}', 'Web\UserController@show')->name('user.profile')->middleware('user.authenticated');
+ 
+
+/*********************/
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::get('/register', 'Web\AuthController@register')->name('auth.register');
-    Route::get('/login', 'Web\AuthController@login')->name('auth.login');
-    Route::get('/dologin', 'Web\AuthController@dologin')->name('auth.dologin');
-    Route::get('/provider/{provider}', 'Web\AuthController@redirectToProvider')->name('auth.provider');
+
+    Route::get('/register', 'Web\AuthController@register')
+    ->name('auth.register');
+
+    Route::get('/login', 'Web\AuthController@login')
+    ->name('auth.login');
+ 
+    Route::get('/dologin', 'Web\AuthController@dologin')
+    ->name('auth.dologin');
+
+    Route::get('/provider/{provider}', 'Web\AuthController@redirectToProvider')
+    ->name('auth.provider');
+
     Route::get('/provider/{provider}/callback', 'Web\AuthController@handleProviderCallback');
+
     Route::get('/logout', 'Web\AuthController@logout')->name('auth.logout');
 });
 
+/*************/
+
+
+
+
+
+
+
 Route::group(['prefix' => 'product-backlogs', 'middleware' => ['user.authenticated']], function () {
-    Route::get('/list/{mode?}', 'Web\ProductBacklogController@index')->name('product_backlogs.index');
-    Route::get('/show/{slug}', 'Web\ProductBacklogController@show')->name('product_backlogs.show');
-    Route::get('/create', 'Web\ProductBacklogController@create')->name('product_backlogs.create');
-    Route::post('/store', 'Web\ProductBacklogController@store')->name('product_backlogs.store');
-    Route::get('/edit/{slug}', 'Web\ProductBacklogController@edit')->name('product_backlogs.edit');
-    Route::post('/update/{slug}', 'Web\ProductBacklogController@update')->name('product_backlogs.update');
+    Route::get('/list/{mode?}', 'Web\ProductBacklogController@index')
+    ->name('product_backlogs.index');
+
+    Route::get('/show/{slug}', 'Web\ProductBacklogController@show')
+    ->name('product_backlogs.show');
+
+    Route::get('/create', 'Web\ProductBacklogController@create')
+    ->name('product_backlogs.create');
+
+    Route::post('/store', 'Web\ProductBacklogController@store')
+    ->name('product_backlogs.store');
+
+    Route::get('/edit/{slug}', 'Web\ProductBacklogController@edit')
+    ->name('product_backlogs.edit');
+    
+    Route::post('/update/{slug}', 'Web\ProductBacklogController@update')
+    ->name('product_backlogs.update');
 });
 
 Route::group(['prefix' => 'sprints', 'middleware' => ['user.authenticated', 'sprint.expired', 'global.activities']], function () {
@@ -116,10 +172,14 @@ Route::group(['prefix' => 'teams', 'middleware' => ['user.authenticated']], func
 });
 
 Route::group(['prefix' => 'wizard', 'middleware' => ['user.authenticated']], function () {
+    
     Route::get('/install', 'Web\WizardController@install')->name('wizard.install');
-    Route::get('/step1', 'Web\WizardController@step1')->name('wizard.step1');
-    Route::any('/step2', 'Web\WizardController@step2')->name('wizard.step2');
-    Route::get('/step3', 'Web\WizardController@step3')->name('wizard.step3');
+    
+    Route::get('/{provider}/step1', 'Web\WizardController@step1')->name('wizard.step1');
+    
+    Route::any('/{provider}/step2', 'Web\WizardController@step2')->name('wizard.step2');
+    
+    Route::get('/{provider}/step3', 'Web\WizardController@step3')->name('wizard.step3');
 });
 
 Route::put('/slack', 'Web\SlackUserController@update')->name('slack.update')->middleware('user.authenticated');

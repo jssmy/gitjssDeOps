@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
 
         'issue' => \GitScrum\Http\Middleware\IssueMiddleware::class,
         'product-backlog' => \GitScrum\Http\Middleware\ProductbacklogMiddleware::class,
+        'wizard.application'=> \GitScrum\Http\Middleware\ApplicationsMiddleWare::class
     ];
 }

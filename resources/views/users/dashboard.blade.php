@@ -10,7 +10,7 @@
 
 <div class="col-lg-6 text-right">
     <div class="btn-group">
-        <a href="{{route('wizard.step1')}}" class="btn btn-sm btn-primary">
+        <a href="{{route('wizard.step1','github')}}" class="btn btn-sm btn-primary">
             {{trans('gitscrum.update-repositories')}}</a>
     </div>
 </div>
@@ -69,7 +69,7 @@
         <h4 class="gs-card-title">{{trans('gitscrum.shortcuts')}}</h4>
         <div class="gs-card-content">
             <a href="{{route('issues.index',['slug' => 0])}}">{{trans('gitscrum.my-planning')}}</a>
-            <a href="{{route('wizard.step1')}}">{{trans('gitscrum.sync-repos-issues')}}</a>
+            <a href="{{route('wizard.step1','github')}}">{{trans('gitscrum.sync-repos-issues')}}</a>
         </div>
     </div>
 

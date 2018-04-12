@@ -27,7 +27,10 @@ class CreateUsersTable extends Migration
             $table->string('token')->nullable();
             $table->integer('main_repository')->unsigned()->nullable();
             $table->string('position_held', 45)->nullable();
+            $table->integer('main_user_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('main_user_id')->references('id')->on('main_users');
         });
     }
 

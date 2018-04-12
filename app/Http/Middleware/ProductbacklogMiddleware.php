@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace GitScrum\Http\Middleware;
 
 use Closure;
@@ -17,10 +17,13 @@ class ProductbacklogMiddleware
       */
     public function handle($request, Closure $next)
     {
-        $total = Auth::user()->organizations()->count();
-
+      /****  modify  **********/
+        
+        $total= Auth::user()->githubUser()->organizations->count();
+        //dd($total);
+        //$total = Auth::user()->organizations()->count();
         if (!$total) {
-            return redirect()->route('wizard.step1');
+            return redirect()->route('wizard.step1','github');
         }
 
         return $next($request);

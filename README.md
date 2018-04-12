@@ -261,3 +261,4 @@ Laravel GitScrum is licensed under the [MIT license](https://opensource.org/lice
 - [Chart.js](https://github.com/chartjs/Chart.js)
 
 - [Date Range Picker for Bootstrap](https://github.com/dangrossman/bootstrap-daterangepicker)
+# gitjssDeOps

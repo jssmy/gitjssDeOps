@@ -16,7 +16,8 @@ class Github implements ProviderInterface
     private $organization = [];
 
     public function tplUser($obj)
-    {
+    { 
+        //dd($obj);
         return [
             'provider_id' => $obj->id,
             'provider' => 'github',
@@ -30,30 +31,38 @@ class Github implements ProviderInterface
             'location' => isset($obj->user['location']) ? $obj->user['location'] : null,
             'blog' => isset($obj->user['blog']) ? $obj->user['blog'] : null,
             'email' => isset($obj->email) ? $obj->email : null,
+            'main_user_id'=>Auth::guard('userAuth')->user()->id,
+            
         ];
     }
 
     public function tplRepository($repo, $slug = false)
     {
-        return (object) [
-            'provider_id' => $repo->id,
-            'organization_id' => $this->organization($repo->owner->login),
-            'organization_title' => $repo->owner->login,
-            'slug' => $slug ? $slug : Helper::slug($repo->name),
-            'title' => $repo->name,
-            'fullname' => $repo->full_name,
-            'is_private' => $repo->private,
-            'html_url' => $repo->html_url,
-            'description' => $repo->description,
-            'fork' => $repo->fork,
-            'url' => $repo->url,
-            'since' => Carbon::parse($repo->created_at)->toDateTimeString(),
-            'pushed_at' => Carbon::parse($repo->pushed_at)->toDateTimeString(),
-            'ssh_url' => $repo->ssh_url,
-            'clone_url' => $repo->clone_url,
-            'homepage' => $repo->homepage,
-            'default_branch' => $repo->default_branch,
-        ];
+
+        //dd($repo);
+        if(!is_null($repo)){
+            
+                return (object) [
+                'provider_id' => $repo->id,
+                'organization_id' => $this->organization($repo->owner->login),
+                'organization_title' => $repo->owner->login,
+                'slug' => $slug ? $slug : Helper::slug($repo->name),
+                'title' => $repo->name,
+                'fullname' => $repo->full_name,
+                'is_private' => $repo->private,
+                'html_url' => $repo->html_url,
+                'description' => $repo->description,
+                'fork' => $repo->fork,
+                'url' => $repo->url,
+                'since' => Carbon::parse($repo->created_at)->toDateTimeString(),
+                'pushed_at' => Carbon::parse($repo->pushed_at)->toDateTimeString(),
+                'ssh_url' => $repo->ssh_url,
+                'clone_url' => $repo->clone_url,
+                'homepage' => $repo->homepage,
+                'default_branch' => $repo->default_branch,
+            ];
+        }
+        return (object) [];
     }
 
     public function tplIssue($obj, $productBracklogId)
@@ -63,9 +72,10 @@ class Github implements ProviderInterface
                 ->where('provider', 'github')->first();
         }
 
+       
         return [
             'provider_id' => $obj->id,
-            'user_id' => isset($user->id) ? $user->id : Auth::user()->id,
+            'user_id' => isset($user->id) ? $user->id : Auth::user()->githubUser()->id,
             'product_backlog_id' => $productBracklogId,
             'effort' => 0,
             'config_issue_effort_id' => 1,
@@ -103,14 +113,20 @@ class Github implements ProviderInterface
             'total_private_repos' => isset($obj->total_private_repos) ? $obj->total_private_repos : null,
             'since' => Carbon::parse((isset($obj->created_at) ? $obj->created_at : Carbon::now()))->toDateTimeString(),
             'disk_usage' => isset($obj->disk_usage) ? $obj->disk_usage : null,
+            'provider'=>'github'
         ];
     }
 
     public function readRepositories($page = 1, &$repos = null)
     {
-        $response = collect(Helper::request('https://api.github.com/user/repos?page='. $page))->map(function ($repo) {
+
+        //dd($repos);
+        $response = collect(Helper::request('https://api.github.com/user/repos?page='. $page))->map(
+            function ($repo) {
+
             return $this->tplRepository($repo);
-        });
+            }
+    );
 
         if (is_null($repos)) {
             $repos = collect();
@@ -135,7 +151,7 @@ class Github implements ProviderInterface
         if (is_null($oldTitle)) {
             $endpoint = 'https://api.github.com/orgs/'.$owner.'/repos';
 
-            if (Auth::user()->username == $owner) {
+            if (Auth::user()->githubUser()->username == $owner) {
                 $endpoint = 'https://api.github.com/user/repos';
             }
 
@@ -162,13 +178,15 @@ class Github implements ProviderInterface
                 }
 
                 if (isset($response->id)) {
-                    $organization = Organization::create($this->tplOrganization($response));
+                    $data = $this->tplOrganization($response);
+                    //dd($data);
+                    $organization = Organization::create($data);
                 }
             }
 
-            if (is_null($organization->users()->where('users_has_organizations.user_id', Auth::id())
+            if (is_null($organization->users()->where('users_has_organizations.user_id', Auth::user()->githubUser()->id)
                 ->where('users_has_organizations.organization_id', $organization->id)->first())) {
-                $organization->users()->attach(Auth::id());
+                $organization->users()->attach(Auth::user()->githubUser()->id);
             }
             $this->organization[$login] = $organization;
 

@@ -9,7 +9,7 @@
                 <strong>{{$productBacklog->organization->title}}</strong>
             @else
             <select name="organization_id" class="form-control m-b">
-                @foreach (Auth::user()->organizations as $organization)
+                @foreach (Auth::user()->githubUser()->organizations as $organization)
                 <option value="{{$organization->id}}">{{$organization->title}}</option>
                 @endforeach
             </select>
@@ -20,7 +20,7 @@
     <div class="form-group">
         <label class="col-sm-12">{{trans('gitscrum.name')}}</label>
         <div class="col-sm-12">
-            <input name="title" type="text" class="form-control" value="{{ @$productBacklog->title }}"
+            <input name="title" type="text" class="form-control" value="{{  @$productBacklog->title }}"
                 pattern=".{2,255}" title="{{trans('gitscrum.title-must-be-between-2-and-255-characters')}}"
                 autocomplete="off" maxlength="255" required>
         </div>

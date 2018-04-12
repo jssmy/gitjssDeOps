@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function dashboard()
     {
-        $user = Auth::user();
+        $user = Auth::user()->githubUser();
         $sprints = $user->sprints()->take(2);
         $sprintColumns = ['tbody_sprintFavorite',
             'tbody_sprintBacklog',

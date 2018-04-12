@@ -1,58 +1,59 @@
-@section('title',  trans('gitscrum.title-login'))
+@extends('auth.main')
+    @section('content')
+        <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>jssDevOps</strong> usuarios</h1>
+                            <div class="description">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h3>Iniciar Sesión</h3>
+                                    <p>Ingrese sus credenciales</p>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
 
-@extends('layouts.master-fluid', ['hideNavbar' => true, 'bodyClass' => 'body-login'])
+                                <form role="form" action="" method="post" class="login-form">
+                                      {{ csrf_field() }}
+                                    <div class="form-group">
+                                        <label class="sr-only" for="email">Usuario</label>
+                                        <input type="email" name="email" placeholder="Usuario..." class="form-username form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email">
+                                        @if ($errors->has('email'))
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="password">Contraseña</label>
+                                        <input type="password" name="password" placeholder="Contraseña..." class="form-password form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password">
+                                        @if ($errors->has('email'))
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                        @endif
 
-@section('content')
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<a href="https://github.com/GitScrum-Community/laravel-gitscrum"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
-
-    <div class="authentication__left-screen">
-
-        <div class="aligner">
-
-            <div class="text-center">
-
-                <div class="authentication__logo">
-                    <img src="{{ asset('img/gitscrum-circle.png') }}">
+                                    </div>
+                                 <button type="submit" class="btn">Entrar</button>
+                                </form>
+                            </div>
+                            <br>
+                            <a href="{{ route('auth.provider','google') }}" class="btn btn-block btn-social btn-google">
+                                <i class="fa fa-google-plus"></i> Sign in with Google
+                            </a>
+                        </div>
+                    </div>
+                    
                 </div>
-
-                <h3 class="">
-                    {{trans('gitscrum.welcome-to')}}
-                    <a href="https://github.com/gitscrum-community-edition" target="_blank"><strong>GitScrum</strong></a>
-                </h3>
-
-                <a href="{{route('auth.provider', ['provider' => 'github'])}}" class="btn btn-lg btn-default btn-loader">
-                    <i class="fa fa-github" aria-hidden="true"></i>&nbsp;&nbsp;<strong>GitHub</strong>
-                </a>
-
-                <a href="{{route('auth.provider', ['provider' => 'gitlab'])}}" class="btn btn-lg btn-default btn-loader">
-                    <i class="fa fa-gitlab" aria-hidden="true"></i>&nbsp; <strong>GitLab</strong>
-                </a>
-
-                <a href="{{route('auth.provider', ['provider' => 'bitbucket'])}}" class="btn btn-lg btn-default btn-loader">
-                    <i class="fa fa-bitbucket" aria-hidden="true"></i>&nbsp; <strong>Bitbucket</strong>
-                </a>
-
-                <p class="small">The GitScrum Community is licensed under the
-                    <a href="https://github.com/gitscrum-community-edition/laravel-gitscrum/blob/master/LICENSE.md" target="_blank">MIT license</a></p>
-
             </div>
-
-        </div>
-    </div>
-
-    <div class="authentication__right-screen">
-
-        <div class="aligner">
-            <div class="content">
-                <h1>GitScrum</h1>
-                <h2>be faster</h2>
-
-                <p>{{trans('gitscrum.slogan')}}</p>
-            </div>
-        </div>
-
-    </div>
-
-@endsection
+    @endsection

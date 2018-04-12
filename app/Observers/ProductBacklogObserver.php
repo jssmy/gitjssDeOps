@@ -12,7 +12,7 @@ class ProductBacklogObserver
     public function creating(ProductBacklog $productBacklog)
     {
         if (!isset($productBacklog->user_id)) {
-            $productBacklog->user_id = Auth::user()->id;
+            $productBacklog->user_id = Auth::user()->githubUser()->id;
         }
 
         if (isset($productBacklog->is_api)) {
@@ -21,14 +21,14 @@ class ProductBacklogObserver
         $productBacklog->slug = Helper::slug($productBacklog->title);
         if (isset($productBacklog->is_api)) {
             $owner = Organization::find($productBacklog->organization_id);
-            $productBacklog::$tmp = app(Auth::user()->provider)->createOrUpdateRepository($owner->username, $productBacklog);
+            $productBacklog::$tmp = app(Auth::user()->githubUser()->provider)->createOrUpdateRepository($owner->username, $productBacklog);
         }
     }
 
     public function created(ProductBacklog $productBacklog)
     {
         if (isset($productBacklog->is_api)) {
-            $template = app(Auth::user()->provider)->tplRepository($productBacklog::$tmp, $productBacklog->slug);
+            $template = app(Auth::user()->githubUser()->provider)->tplRepository($productBacklog::$tmp, $productBacklog->slug);
             if (! is_null($template)) {
                 $obj = ProductBacklog::slug($template->slug)->first();
                 unset($template->organization_title);
@@ -43,7 +43,7 @@ class ProductBacklogObserver
     {
         $oldRepos = ProductBacklog::find($productBacklog->id);
         $owner = Organization::find($productBacklog->organization_id);
-        $repos = app(Auth::user()->provider)->createOrUpdateRepository($owner->username, $productBacklog, $oldRepos->title);
+        $repos = app(Auth::user()->githubUser()->provider)->createOrUpdateRepository($owner->username, $productBacklog, $oldRepos->title);
         // skip update if repos object is null to prevent error
         if (! is_null($repos)) {
             $productBacklog->html_url = $repos->html_url;

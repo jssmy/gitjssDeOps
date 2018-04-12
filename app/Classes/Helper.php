@@ -9,7 +9,7 @@ use Auth;
 use Carbon;
 
 class Helper
-{
+{ 
     public static function arrayDateRange($between, $value = 0)
     {
         $arr = [];
@@ -84,9 +84,19 @@ class Helper
             ->get();
     }
 
-    public static function request($url, $auth = true, $customRequest = null, $postFields = null)
+    public static function request($url, $auth = true, $customRequest = null, $postFields = null,$provider='github')
     {
-        $user = Auth::user();
+       $user=[];
+        switch ($provider) {
+            case 'github':
+                $user = Auth::user()->githubUser();
+                break;
+            
+            case 'trello':
+                
+                break;
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0');
         curl_setopt($ch, CURLOPT_URL, $url);

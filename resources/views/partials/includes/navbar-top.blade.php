@@ -35,7 +35,7 @@
                             <li><a href="{{route('team.index')}}">
                                 <i class="fa fa-users" aria-hidden="true"></i>
                                     {{trans('gitscrum.team')}}</a></li>
-                            <li><a href="{{route('wizard.step1')}}">
+                            <li><a href="{{route('wizard.step1','github')}}">
                                 <i class="fa fa-refresh" aria-hidden="true"></i>
                                     {{trans('gitscrum.sync-repos-issues')}}</a></li>
                             <li class="nav-divider"></li>

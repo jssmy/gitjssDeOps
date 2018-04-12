@@ -4,6 +4,7 @@ namespace GitScrum\Http\Controllers\Web;
 
 use GitScrum\Http\Requests\AuthRequest;
 use GitScrum\Models\User;
+use GitScrum\Models\MainUser;
 use Socialite;
 use Auth;
 use SocialiteProviders\Manager\Exception\InvalidArgumentException;
@@ -13,9 +14,9 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
-    }
-
+       
+    } 
+ 
     public function login()
     {
         return view('auth.login');
@@ -29,33 +30,64 @@ class AuthController extends Controller
     }
 
     public function redirectToProvider($provider)
-    {
-        switch ($provider) {
-            case 'gitlab':
-                return Socialite::with('gitlab')->redirect();
-                break;
-            case 'github':
-                return Socialite::driver('github')->scopes(['repo', 'notifications', 'read:org'])->redirect();
-                break;
-            case 'bitbucket':
-                return Socialite::driver('bitbucket')->redirect();
-                break;
+    {  
+       
+        if($provider=='github'){
+            return Socialite::driver('github')
+                ->scopes(['repo', 'notifications', 'read:org'])
+                ->redirect();
+        }
+        if($provider=='google'){
+             return Socialite::driver('google')->redirect();   
+             
+        }
+       
+        if($provider=='trello'){
+             
+             return Socialite::driver('trello')->redirect();   
 
-            default:
-                throw new InvalidArgumentException(trans('gitscrum.provider-was-not-set'));
-                break;
+             //dd($d);
         }
     }
-
+ 
     public function handleProviderCallback($provider)
     {
+
+        
+        /*
+        if (!\Request::has('code')) {
+            return redirect()->route('auth.login');
+        */
         $providerUser = Socialite::driver($provider)->user();
+        //dd($providerUser);
+        
+        $data = app(ucfirst($provider))->tplUser($providerUser);    
+        //dd($data);
 
-        $data = app(ucfirst($provider))->tplUser($providerUser);
+        if($provider=='google'){
+            $user= MainUser::updateOrCreate(['provider_id'=>$data['provider_id']],$data);
+        }
+        else{
 
-        $user = User::updateOrCreate(['provider_id' => $data['provider_id']], $data);
-
-        Auth::loginUsingId($user->id);
+            User::updateOrCreate(['provider_id'=>$data['provider_id']],$data);    
+            switch ($provider) {
+                case 'github':
+                    Auth::user()->github=1;
+                    break;
+                case 'trello':
+                    Auth::user()->trello=1;
+                    break;
+                case 'slack':
+                    Auth::user()->slack=1;
+                    break;
+            }
+            Auth::user()->save();    
+        }
+        
+        
+        
+        if($provider=='google')auth()->login($user);
+         
 
         return redirect()->route('user.dashboard');
     }
