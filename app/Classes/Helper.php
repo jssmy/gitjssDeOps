@@ -84,19 +84,13 @@ class Helper
             ->get();
     }
 
-    public static function request($url, $auth = true, $customRequest = null, $postFields = null,$provider='github')
-    {
-       $user=[];
-        switch ($provider) {
-            case 'github':
-                $user = Auth::user()->githubUser();
-                break;
-            
-            case 'trello':
-                
-                break;
-        }
-
+    public static function request($url, $auth = true, $customRequest = null, $postFields = null)
+    {   
+        $user=[];
+        if(strpos($url,'github')) $user = Auth::user()->githubUser();
+        if(strpos($url,'trello')) $user = Auth::user()->trelloUser();
+        //dd($user);
+        //dd($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0');
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -122,7 +116,7 @@ class Helper
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json',
                 'Content-Length: '.strlen($postFields), ]);
         }
-
+        
         if (strtolower($user->provider) == 'bitbucket') {
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer '.$user->token]);
         }
@@ -130,7 +124,7 @@ class Helper
         if (!is_null($customRequest)) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $customRequest); //'PATCH'
         }
-
+        
         if ($auth && isset($user->username) && strtolower($user->provider) != 'bitbucket') {
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $user->username.':'.$user->token);

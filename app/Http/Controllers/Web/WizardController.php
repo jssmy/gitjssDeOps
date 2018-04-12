@@ -9,21 +9,42 @@ use Auth;
 
 class WizardController extends Controller
 {
+ 
 
+    public function step1($provider)
+    {
+        switch ($provider) {
+            case 'github':
+                /**  start gihub provider **/
+                $repositories = (object) app(Auth::user()->githubUser()->provider)
+                ->readRepositories();
+                $currentRepositories = ProductBacklog::all();
 
-    public function step1()
-    {   
+                Session::put('Repositories', $repositories);
+
+                return view('wizard.step1')
+                    ->with('repositories', $repositories)
+                    ->with('currentRepositories', $currentRepositories)
+                    ->with('columns', ['checkbox', 'repository', 'organization'])
+                    ->with('provider',$provider);
+
+                /** end github provider */
+                break;
+            
+            case 'trello':
+                /**   start trello provider ***/
+                $boards = (object) app(Auth::user()->trelloUser()->provider)
+                ->readBoards();
+
+                 return view('wizard.step1')
+                    ->with('provider',$provider);
+                //dd($boards);
+                /**  end trello provider **/
+                break;
+                
+                
+        }
         
-        $repositories = (object) app(Auth::user()->githubUser()->provider)
-        ->readRepositories();
-        $currentRepositories = ProductBacklog::all();
-
-        Session::put('Repositories', $repositories);
-
-        return view('wizard.step1')
-            ->with('repositories', $repositories)
-            ->with('currentRepositories', $currentRepositories)
-            ->with('columns', ['checkbox', 'repository', 'organization']);
     }
 
 

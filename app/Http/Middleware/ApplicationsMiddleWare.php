@@ -18,7 +18,7 @@ class ApplicationsMiddleWare
    
 
         //dd(Auth::user());
-        if (!(Auth::user()->github && Auth::user()->trello))
+        if (!(Auth::user()->github && Auth::user()->trello && Auth::user()->slack))
         {
             return redirect()->route('config.application');
         }

@@ -28,5 +28,60 @@ class Trello
             'main_user_id'=>Auth::guard('userAuth')->user()->id,
         ];
     }
-}
 
+
+    public function readBoards($page=1,&$boards=null){
+        //dd();
+        $url= 'https://api.trello.com/1/members/'
+              .Auth::user()->trelloUser()->trelloUserId()
+              .'/boards?key='.env('TRELLO_CLIENT_ID')
+              .'&token='.Auth::user()->trelloUser()->token;
+        //$provider='trello';
+        $response = collect(Helper::request($url,$provider='trello'))->map(function($bor){
+            return $this->tplBoard($bor);
+
+        });
+
+
+        if (is_null($boards)) {
+            $boards = collect();
+        }
+
+        $boards->push($response);
+
+        if ($response->count() == 30) {
+            $this->readRepositories(++$page, $boards);
+        }
+
+        return $boards->flatten(1)->sortBy('title');
+    }
+
+    public function tplBoard($obj){
+        //dd($obj);
+        if(!is_null($obj)){
+            return (object)[
+                'id'=>$obj->id,
+                'name' => $obj->name,
+                'desc'  => $obj->desc,
+                'closed'  =>$obj->closed,
+                'idOrganization'=> $obj->idOrganization,
+                'subscribed'=>$obj->subscribed,
+                'shortUrl'=>$obj->shortUrl,
+                'invited'=>$obj->invited,
+                'members'=>count($obj->memberships),
+                'dateLastActivity'=>$obj->dateLastActivity,
+                'descData'=>$obj->descData
+            ];
+        }
+
+
+        return (object)[];
+    }
+
+
+
+
+
+
+}
+//'https://api.trello.com/1/members/59f96cb4f6f73854683eb5f4/boards?key=13f1e71e1973172e8a0563b36092cbc3&token=beaf7ab5c18c82932cdec74199346572d6b57176e1e41ab32c45104d46f6e544'

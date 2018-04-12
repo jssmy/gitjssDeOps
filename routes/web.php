@@ -17,7 +17,7 @@ Route::get('/', function () {
      ///return redirect()->route('auth.login');
 })->name('home');
 
-
+ 
 
 Route::get('/register', function(){
 
@@ -73,7 +73,8 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'product-backlogs', 'middleware' => ['user.authenticated']], function () {
     Route::get('/list/{mode?}', 'Web\ProductBacklogController@index')
-    ->name('product_backlogs.index');
+    ->name('product_backlogs.index')
+    ->middleware('wizard.application');
 
     Route::get('/show/{slug}', 'Web\ProductBacklogController@show')
     ->name('product_backlogs.show');
@@ -91,16 +92,36 @@ Route::group(['prefix' => 'product-backlogs', 'middleware' => ['user.authenticat
     ->name('product_backlogs.update');
 });
 
+
+
 Route::group(['prefix' => 'sprints', 'middleware' => ['user.authenticated', 'sprint.expired', 'global.activities']], function () {
-    Route::get('/planning/{slug}/issues', 'Web\IssueController@index')->name('issues.index');
+    
+    Route::get('/planning/{slug}/issues', 'Web\IssueController@index')
+    ->name('issues.index');
+
     Route::get('/list/{mode?}/{slug_product_backlog?}', 'Web\SprintController@index')->name('sprints.index');
-    Route::get('/show/{slug}', 'Web\SprintController@show')->name('sprints.show');
-    Route::get('/create/{slug_product_backlog?}', 'Web\SprintController@create')->name('sprints.create');
-    Route::post('/store', 'Web\SprintController@store')->name('sprints.store');
-    Route::get('/edit/{slug}', 'Web\SprintController@edit')->name('sprints.edit');
-    Route::post('/update/{slug}', 'Web\SprintController@update')->name('sprints.update');
-    Route::delete('/destroy', 'Web\SprintController@destroy')->name('sprints.destroy');
-    Route::any('/status-update/{slug?}/{status?}', 'Web\SprintController@statusUpdate')->name('sprints.status.update');
+
+
+    Route::get('/show/{slug}', 'Web\SprintController@show')
+    ->name('sprints.show');
+
+    Route::get('/create/{slug_product_backlog?}', 'Web\SprintController@create')
+    ->name('sprints.create');
+
+    Route::post('/store', 'Web\SprintController@store')
+    ->name('sprints.store');
+
+    Route::get('/edit/{slug}', 'Web\SprintController@edit')
+    ->name('sprints.edit');
+
+    Route::post('/update/{slug}', 'Web\SprintController@update')
+    ->name('sprints.update');
+
+    Route::delete('/destroy', 'Web\SprintController@destroy')
+    ->name('sprints.destroy');
+
+    Route::any('/status-update/{slug?}/{status?}', 'Web\SprintController@statusUpdate')
+    ->name('sprints.status.update');
 });
 
 Route::group(['prefix' => 'user-stories', 'middleware' => ['user.authenticated']], function () {

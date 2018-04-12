@@ -37,7 +37,7 @@ class IssueController extends Controller
             return [$sprint , $sprint->issues];
         }
 
-        return [ null , $this->eagerLoad(Auth::user()->issues())->get()];
+        return [ null , $this->eagerLoad(Auth::user()->githubUser()->issues())->get()];
     }
 
     private function eagerLoad($query, $relation = '')

@@ -45,19 +45,20 @@ class AuthController extends Controller
         if($provider=='trello'){
              
              return Socialite::driver('trello')->redirect();   
-
-             //dd($d);
+        }
+        if($provider=='slack'){
+            return Socialite::driver('slack')->redirect();      
         }
     }
  
     public function handleProviderCallback($provider)
     {
 
+    
         
-        /*
-        if (!\Request::has('code')) {
+        if (\Request::has('denied')) {
             return redirect()->route('auth.login');
-        */
+        }
         $providerUser = Socialite::driver($provider)->user();
         //dd($providerUser);
         
@@ -81,7 +82,9 @@ class AuthController extends Controller
                     Auth::user()->slack=1;
                     break;
             }
-            Auth::user()->save();    
+            Auth::user()->save();
+            return redirect()->route('wizard.step1',$provider);
+
         }
         
         

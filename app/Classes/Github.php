@@ -14,7 +14,7 @@ use GitScrum\Contracts\ProviderInterface;
 class Github implements ProviderInterface
 {
     private $organization = [];
-
+ 
     public function tplUser($obj)
     { 
         //dd($obj);
@@ -88,7 +88,7 @@ class Github implements ProviderInterface
             'created_at' => $obj->created_at,
             'updated_at' => $obj->updated_at,
         ];
-    }
+    } 
 
     public function tplOrganization($obj)
     {

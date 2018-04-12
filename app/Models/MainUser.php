@@ -21,8 +21,17 @@ class MainUser extends Authenticatable
     ]; 
 
     public function githubUser(){
-    	return User::where('provider','github')->first();
+    	return User::where('provider','github')
+                    ->where('main_user_id',$this->id)->first();
     }
+
+    public function trelloUser(){
+        return User::where('provider','trello')
+                    ->where('main_user_id',$this->id)->first();
+    }
+
+   
 
 
 }
+

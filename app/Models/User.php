@@ -95,4 +95,8 @@ class User extends Authenticatable
         return $this->belonsTo(MainUser::class,'id');        
     }
 
+    public function trelloUserId(){
+        return $this->provider_id;
+    }
+
 }

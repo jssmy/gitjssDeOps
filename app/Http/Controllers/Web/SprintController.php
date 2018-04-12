@@ -42,6 +42,7 @@ class SprintController extends Controller
      */
     public function create($slug_product_backlog = null)
     {
+        //dd('hola');
         $productBacklog_id = null;
 
         if (!is_null($slug_product_backlog)) {
@@ -49,7 +50,7 @@ class SprintController extends Controller
         }
 
         return view('sprints.create')
-            ->with('productBacklogs', Auth::user()->productBacklogs())
+            ->with('productBacklogs', Auth::user()->githubUser()->productBacklogs())
             ->with('productBacklog_id', $productBacklog_id)
             ->with('action', 'Create');
     }
