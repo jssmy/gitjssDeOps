@@ -14,7 +14,7 @@ class ModifyProviderIdAndProviderColumnsToUsersOrganizationsProductBacklogsIssue
     public function up()
     {
         DB::statement('ALTER TABLE users MODIFY COLUMN provider_id VARCHAR(255) NOT NULL , ADD INDEX `provider_id` (`provider_id`)');
-        DB::statement("ALTER TABLE users MODIFY COLUMN provider ENUM('github','trello','slack') NOT NULL");
+        DB::statement("ALTER TABLE users MODIFY COLUMN provider ENUM('github','trello','slack','blazemeter','jenkis') NOT NULL");
 
         DB::statement('ALTER TABLE organizations MODIFY COLUMN provider_id VARCHAR(255) NOT NULL , ADD INDEX `provider_id` (`provider_id`)');
         DB::statement("ALTER TABLE organizations MODIFY COLUMN provider ENUM('gitlab', 'github', 'bitbucket') NOT NULL");
@@ -22,7 +22,7 @@ class ModifyProviderIdAndProviderColumnsToUsersOrganizationsProductBacklogsIssue
         DB::statement('ALTER TABLE product_backlogs MODIFY COLUMN provider_id VARCHAR(255) NOT NULL , ADD INDEX `provider_id` (`provider_id`)');
 
         DB::statement('ALTER TABLE issues MODIFY COLUMN provider_id VARCHAR(255) , ADD INDEX `provider_id` (`provider_id`)');
-        DB::statement("ALTER TABLE issues MODIFY COLUMN provider ENUM('gitlab', 'github', 'bitbucket') NOT NULL");
+        DB::statement("ALTER TABLE issues MODIFY COLUMN provider ENUM('gitlab') NOT NULL");
 
     }
 
